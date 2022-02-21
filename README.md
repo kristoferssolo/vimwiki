@@ -1,2 +1,2 @@
-= Kristofers Solo notes =
-[[Contents|index.wiki]]
+# Kristofers Solo notes
+[Contents](index.wiki)
