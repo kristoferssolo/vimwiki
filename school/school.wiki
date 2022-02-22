@@ -1,2 +1,2 @@
-* [[english/english.wiki|English]]
-* [[literatur/literatur.wiki|Literatur]]
+[[english/english.wiki|English]]
+[[literature/literature.wiki|Literature]]
