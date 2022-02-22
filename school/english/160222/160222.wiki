@@ -1,76 +1,76 @@
 = Homework =
 === Task A ===
-1. endure
-2. shift
-3. innovation
-4. potential
-5. mature
-6. switched
-7. progress
-8. substitute
-9. decay
-10. modified
+  1. endure
+  2. shift
+  3. innovation
+  4. potential
+  5. mature
+  6. switched
+  7. progress
+  8. substitute
+  9. decay
+  10. modified
 === Task B ===
-1. C last
-2. A revolution
-3. B status quo
-4. A uniform
-5. D radical
-6. B trend
-7. C dynamic
-8. D refine
-9. A novel
-10. D innovative
-11. C influencer
-12. A conservative
+  1. C last
+  2. A revolution
+  3. B status quo
+  4. A uniform
+  5. D radical
+  6. B trend
+  7. C dynamic
+  8. D refine
+  9. A novel
+  10. D innovative
+  11. C influencer
+  12. A conservative
 === Task C ===
-1. reformed
-2. revise
-3. distorted
-4. amended
-5. maintain
-6. remain
-7. adjust
-8. adapt
-9. alternate
-10. alternative
-11. persist
-12. sustain
-13. converted
-14. transformed
-15. spoil
-16. deteriorate (not included in _official_ tasks)
+  1. reformed
+  2. revise
+  3. distorted
+  4. amended
+  5. maintain
+  6. remain
+  7. adjust
+  8. adapt
+  9. alternate
+  10. alternative
+  11. persist
+  12. sustain
+  13. converted
+  14. transformed
+  15. spoil
+  16. deteriorate (not included in _official_ tasks)
 === Task L ===
-1. break the mould
-2. had a change of heart
-3. turned over a new leaf
-4. reinventing the wheel
-5. stick to your guns
-6. a leopard can't change its sports
-7. changed your tune
-8. the tools of the trade
-9. all mod cons
-10. knows    inside out
+  1. break the mould
+  2. had a change of heart
+  3. turned over a new leaf
+  4. reinventing the wheel
+  5. stick to your guns
+  6. a leopard can't change its sports
+  7. changed your tune
+  8. the tools of the trade
+  9. all mod cons
+  10. knows    inside out
 === Task M ===
-1. continual/continuous/continuing
-2. evolving
-3. revolutionary
-4. flexibility
-5. adjustments
-6. adaptive
-7. influential
-8. capability
-9. unaltered
-10. electrifying
+  1. continual/continuous/continuing
+  2. evolving
+  3. revolutionary
+  4. flexibility
+  5. adjustments
+  6. adaptive
+  7. influential
+  8. capability
+  9. unaltered
+  10. electrifying
 === Task N ===
-1. changeable
-2. maturity
-3. modernised
-4. persistently
-5. endurance
-6. processed
-7. rearrange
-8. renewable
-9. conversion
-10. irreplaceable
+  1. changeable
+  2. maturity
+  3. modernised
+  4. persistently
+  5. endurance
+  6. processed
+  7. rearrange
+  8. renewable
+  9. conversion
+  10. irreplaceable
 
