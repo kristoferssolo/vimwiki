@@ -53,9 +53,9 @@ _The following possesives are not included in teachers documnet_
     3. ones' home is ones' castle => one's home is one's castle 
     4. ✔
     5. mine => my
-    6. childrens => childern's 
+    6. childrens' => childern's 
     7. ✔
-    8. brothers's in- law's => brother-in-law's
+    8. brother's-in-law's => brother-in-law's
     9. us => ours
     10. buses' => bus's
 === Task 26.3 ===
