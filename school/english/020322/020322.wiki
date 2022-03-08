@@ -1,0 +1,19 @@
+= Essays =
+== Opinion essay ==
+=== Topics ===
+  1. Should parents limit the time spent on devices line smartphones?
+  2. Do you think school should start and end later in the day?
+  3. Would communities benefit by having more say in the decisions of their neighbourhoods or would it create chaos?
+=== Thesis ===
+  1. I think that parents limiting their child time spent on devices is dependatant on childs age.
+  2. I think that school should start about an hour later than now.
+  3. I believe that communities would benefit from neighbourhood decisions.
+== Solution essay ==
+=== Topics ===
+  1. How can social media bullying be prevented?
+  2. What is the best way to help someone who is depressed?
+  3. How can you help a friend or roommate who is making poor life choices?
+=== Thesis ===
+  1. Bullying in internet cannot be prevented. (To prevent bullying in internet, one should not use internet.)
+  2. Best way to help a depressed person is to leave them alone.
+  3. Roommates can help each other by talking and providing exaples that some choices can be awful
