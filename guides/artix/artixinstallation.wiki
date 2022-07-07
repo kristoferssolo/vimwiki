@@ -1,86 +1,156 @@
-ls /sys/firmware/efi/efivars
+%% Artix Linux installation guide for runit init system
 
-ping gnu.org
+`su`
 
-su
-lsblk
+%% vda in your case can be sda, sdb, sdc, nvme0n1 or other
+`cfdisk /dev/vda`
+    %% chose `dos`
+    * _boot - 256M_
+    * _root - 10G_
+        %% 10GB for root in VM will be enough, but on hardware make it 30GB-50GB
+    * _home - rest_
 
-cfdisk /dev/vda -> dos
-  * _boot - 256M_
-  * _root - 10G_
-  * _home - rest_
-mkfs.ext4 -L ROOT /dev/_vda2_
-mkfs.ext4 -L HOME /dev/_vda3_
-mkfs.fat -F 32 /dev/_vda1_
-fatlabel /dev/_vda1_ BOOT
-mkdir /mnt/boot
-mkdir /mnt/home
-mount /dev/_vda1_ /mnt/boot
-mount /dev/_vda2_ /mnt
-mount /dev/_vda3_ /mnt/home
+`mkfs.ext4 -L ROOT /dev/vda2`
+`mkfs.ext4 -L HOME /dev/vda3`
+`mkfs.fat -F 32 /dev/vda1`
+`fatlabel /dev/vda1 BOOT`
 
-basestrap /mnt base base-devel runit elogind-runit linux linux-firmware
-fstabgen -U /mnt >> /mnt/etc/fstab
+`mkdir /mnt/{home,boot}`
+`mount /dev/vda1 /mnt/boot`
+`mount /dev/vda2 /mnt`
+`mount /dev/vda3 /mnt/home`
 
-artix-chroot /mnt
-ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
-hwclock --systohc
-pacman -S neovim git
-nvim /etc/locale.gen
-locale-gen
-nvim /etc/locale.conf
-	LANG="en_US.UTF-8"
-  export LC_COLLATE="C"
+`basestrap /mnt base base-devel runit elogind-runit linux linux-firmware`
+`fstabgen -U /mnt >> /mnt/etc/fstab`
 
-pacman -S grub os-prober efibootmgr
-# _BIOS_
-grub-install --recheck /dev/_vda_
-# _UEFI_
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
-grub-mkconfig -o /boot/grub/grub.cfg
+`artix-chroot /mnt`
+`ln -sf /usr/share/zoneinfo/Region/City /etc/localtime`
+`hwclock --systohc`
 
-passwd
-useradd -m _user_
-passwd _user_
-usermod -aG wheel _user_
+%% install any text editor (vim, neovim, nano)
+`pacman -S neovim `
 
-pacman -S doas
-nvim /etc/doas.conf
-  permit nopass :wheel
-chmod -c 0400 /etc/doas.conf
-chown -c root:root /etc/doas.conf
-nvim /etc/sudoers
-nvim /etc/pacman.d/mirrorlist-arch
- Server = https://archlinux.koyanet.lv/archlinux/$repo/os/$arch
-nvim /etc/pacman.conf
-  # Arch
-  [extra]
-  Include = /etc/pacman.d/mirrorlist-arch
-  [community]
-  Include = /etc/pacman.d/mirrorlist-arch
-  [multilib]
-  Include = /etc/pacman.d/mirrorlist-arch
+`nvim /etc/locale.gen`
+    %% uncomment
+    en_US.UTF-8
+    lv_LV.UTF-8
+`locale-gen`
 
+`nvim /etc/locale.conf`
+    LANG=en_US.UTF-8
+    LC_ADDRESS=lv_LV.UTF-8
+    LC_IDENTIFICATION=lv_LV.UTF-8
+    LC_MEASUREMENT=lv_LV.UTF-8
+    LC_MONETARY=lv_LV.UTF-8
+    LC_NUMERIC=lv_LV.UTF-8
+    LC_PAPER=lv_LV.UTF-8
+    LC_TELEPHONE=lv_LV.UTF-8
+    LC_TIME=lv_LV.UTF-8
 
-nvim /etc/hostname
-	_myhostname_
+`pacman -S grub os-prober efibootmgr`
 
-nvim /etc/hosts
+%% for BIOS (old computers or VMs)
+%% if `ls /sys/firmware/efi/efivars` outputs error
+`grub-install --recheck /dev/vda`
+
+%% for UEFI (modern computers)
+`grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub`
+
+`nvim /etc/default/grub`
+    %% uncomment
+    GRUB_DISABLE_OS_PROBER=false
+
+`grub-mkconfig -o /boot/grub/grub.cfg`
+
+%% create root password
+`passwd`
+
+%% create user and user password
+`useradd -m username`
+`passwd username`
+`usermod -aG wheel username`
+
+`nvim /etc/sudoers`
+    %% uncomment
+    %whell ALL=(ALL:ALL) ALL
+    %% or
+    %whell ALL=(ALL:ALL) NOPASSWD: ALL
+    %% for no password option
+
+%% setup `doas` (optional) to replace `sudo`
+`pacman -S doas`
+`nvim /etc/doas.conf`
+    %% add one of following lines
+    permit :wheel
+    %% or
+    permit nopass :wheel
+    %% for no password option
+
+`chown -c root:root /etc/doas.conf`
+
+%% add Arch Linux mirrors
+`nvim /etc/pacman.d/mirrorlist-arch`
+    Server = https://archlinux.koyanet.lv/archlinux/$repo/os/$arch
+`nvim /etc/pacman.conf`
+    %% uncomment
+    Color
+    VerbosePkgLists
+    ParallelDownloads = _amount of threads on your PC_
+    [lib32]
+    Include = /etc/pacman.d/mirrorlist
+
+    %% add following lines
+    [universe]
+    Server = https://universe.artixlinux.org/$arch
+
+    # Arch
+    [extra]
+    Include = /etc/pacman.d/mirrorlist-arch
+    [community]
+    Include = /etc/pacman.d/mirrorlist-arch
+    [multilib]
+    Include = /etc/pacman.d/mirrorlist-arch
+
+%% add Arch Linux keys
+`pacman -Syu artix-archlinux-support`
+`sudo pacman-key --populate archlinux`
+
+`nvim /etc/hostname`
+    %% enter computer name
+	myhostname
+
+`nvim /etc/hosts`
 	127.0.0.1	localhost
 	::1			localhost
-	127.0.1.1	_myhostname_.localdomain _myhostname_
+	127.0.1.1	myhostname.localdomain myhostname
 
 
-pacman -Syu dhcpcd connman-runit connman-gtk elogind
-ln -s /etc/runit/sv/connmand /etc/runit/runsvdir/default
+`pacman -S dhcpcd connman-runit connman-gtk elogind wget`
+`ln -s /etc/runit/sv/connmand /etc/runit/runsvdir/default`
+
+`exit`
+`umount -R /mnt`
+`reboot`
 
 
-exit
-exit
-umount -R /mnt
-reboot
+%% OPTIONAL
+
+%% install and run my setup script
+`wget kristofers.pythonanywhere.com/karbs.sh`
+`chmod +x karbs.sh`
+`./karbs.sh`
+
+%% reboot or run
+`sx`
+
+%% open `nvim` and run `:PlugInstall`
+
+%% or install only paru `paru` (not necessary if installed via `karbs`)
+`git clone https://aur.archlinux.org/paru-bin`
+`cd paru-bin`
+`makepkg -si`
 
 
-git clone https://aur.archlinux.org/paru.git
-cd paru
-makepkg -si
+%% install `reflector` for better Arch Linux server setup
+`sudo pacman -S reflector`
+`sudo reflector --sort rate --country Latvia,Lithuania,Estonia --protocol https --save /etc/pacman.d/mirrorlist-arch --age 12`
