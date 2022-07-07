@@ -1,0 +1,86 @@
+ls /sys/firmware/efi/efivars
+
+ping gnu.org
+
+su
+lsblk
+
+cfdisk /dev/vda -> dos
+  * _boot - 256M_
+  * _root - 10G_
+  * _home - rest_
+mkfs.ext4 -L ROOT /dev/_vda2_
+mkfs.ext4 -L HOME /dev/_vda3_
+mkfs.fat -F 32 /dev/_vda1_
+fatlabel /dev/_vda1_ BOOT
+mkdir /mnt/boot
+mkdir /mnt/home
+mount /dev/_vda1_ /mnt/boot
+mount /dev/_vda2_ /mnt
+mount /dev/_vda3_ /mnt/home
+
+basestrap /mnt base base-devel runit elogind-runit linux linux-firmware
+fstabgen -U /mnt >> /mnt/etc/fstab
+
+artix-chroot /mnt
+ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
+hwclock --systohc
+pacman -S neovim git
+nvim /etc/locale.gen
+locale-gen
+nvim /etc/locale.conf
+	LANG="en_US.UTF-8"
+  export LC_COLLATE="C"
+
+pacman -S grub os-prober efibootmgr
+# _BIOS_
+grub-install --recheck /dev/_vda_
+# _UEFI_
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
+grub-mkconfig -o /boot/grub/grub.cfg
+
+passwd
+useradd -m _user_
+passwd _user_
+usermod -aG wheel _user_
+
+pacman -S doas
+nvim /etc/doas.conf
+  permit nopass :wheel
+chmod -c 0400 /etc/doas.conf
+chown -c root:root /etc/doas.conf
+nvim /etc/sudoers
+nvim /etc/pacman.d/mirrorlist-arch
+ Server = https://archlinux.koyanet.lv/archlinux/$repo/os/$arch
+nvim /etc/pacman.conf
+  # Arch
+  [extra]
+  Include = /etc/pacman.d/mirrorlist-arch
+  [community]
+  Include = /etc/pacman.d/mirrorlist-arch
+  [multilib]
+  Include = /etc/pacman.d/mirrorlist-arch
+
+
+nvim /etc/hostname
+	_myhostname_
+
+nvim /etc/hosts
+	127.0.0.1	localhost
+	::1			localhost
+	127.0.1.1	_myhostname_.localdomain _myhostname_
+
+
+pacman -Syu dhcpcd connman-runit connman-gtk elogind
+ln -s /etc/runit/sv/connmand /etc/runit/runsvdir/default
+
+
+exit
+exit
+umount -R /mnt
+reboot
+
+
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si

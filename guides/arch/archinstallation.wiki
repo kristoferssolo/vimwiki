@@ -1,0 +1,121 @@
+%% Arch Linux installation guide
+
+`timedatectl set-ntp true`
+
+
+%% vda in your case can be sda, sdb, sdc, nvme0n1 or other
+`cfdisk /dev/vda`
+    %% chose `dos`
+    * _boot - 256M_
+    * _root - 10G_
+      %% 10GB for root in VM will be enough, but on hardware make it 30GB-50GB
+    * _home - rest_
+
+`mkfs.ext4 -L ROOT /dev/vda2`
+`mkfs.ext4 -L HOME /dev/vda3`
+`mkfs.fat -F 32 /dev/vda1`
+`fatlabel /dev/vda1 BOOT`
+
+`mount --mkdir /dev/vda1 /mnt/boot`
+`mount /dev/vda2 /mnt`
+`mount --mkdir /dev/vda3 /mnt/home`
+
+`pacstrap /mnt base base-devel linux linux-firmware`
+`genfstab -U /mnt >> /mnt/etc/fstab`
+
+`arch-chroot /mnt`
+`ln -sf /usr/share/zoneinfo/Europe/Riga /etc/localtime`
+`hwclock --systohc`
+
+%% install any text editor (vim, neovim, nano)
+`pacman -S neovim`
+`nvim /etc/locale.gen`
+    %% uncomment
+    en_US.UTF-8
+    lv_LV.UTF-8
+`locale-gen`
+
+`nvim /etc/locale.conf`
+    LANG=en_US.UTF-8
+    LC_ADDRESS=lv_LV.UTF-8
+    LC_IDENTIFICATION=lv_LV.UTF-8
+    LC_MEASUREMENT=lv_LV.UTF-8
+    LC_MONETARY=lv_LV.UTF-8
+    LC_NUMERIC=lv_LV.UTF-8
+    LC_PAPER=lv_LV.UTF-8
+    LC_TELEPHONE=lv_LV.UTF-8
+    LC_TIME=lv_LV.UTF-8
+
+`pacman -S grub os-prober efibootmgr`
+
+%% for BIOS (old computers or VMs)
+%% if `ls /sys/firmware/efi/efivars` outputs error
+`grub-install --recheck /dev/vda`
+
+%% for UEFI (modern computers)
+`grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub`
+
+`nvim /etc/default/grub`
+    %% uncomment
+    GRUB_DISABLE_OS_PROBER=false
+
+`grub-mkconfig -o /boot/grub/grub.cfg`
+
+%% create root password
+`passwd`
+
+%% create user and user password
+`useradd -m username`
+`passwd username`
+`usermod -aG wheel username`
+
+`nvim /etc/sudoers`
+    %% uncomment
+    %whell ALL=(ALL:ALL) ALL
+    %% or
+    %whell ALL=(ALL:ALL) NOPASSWD: ALL
+    %% for no password option
+
+`nvim /etc/pacman.conf`
+    %% uncomment
+    Color
+    VerbosePkgLists
+    ParallelDownloads = _amount of threads on your PC_
+    [multilib]
+    Include = /etc/pacman.d/mirrorlist
+
+`nvim /etc/hostname`
+	%% enter computer name
+	myhostname
+
+`nvim /etc/hosts`
+	127.0.0.1	localhost
+	::1			localhost
+	127.0.1.1	myhostname.localdomain myhostname
+
+
+`pacman -Syu networkmanager`
+`systemctl enable NetworkManager`
+
+%% optional
+`pacman -S gnome neofetch firefox`
+
+
+`exit`
+`umount -R /mnt`
+`reboot`
+
+%% Install and run my setup script
+`wget kristofers.pythonanywhere.com/karbs.sh`
+`chmod +x karbs.sh`
+`./karbs.sh`
+
+%% reboot or run
+`sx`
+
+%% open `nvim` and run `:PlugInstall`
+
+%% or install only paru `paru`
+`git clone https://aur.archlinux.org/paru-bin`
+`cd paru-bin`
+`makepkg -si`

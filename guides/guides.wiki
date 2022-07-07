@@ -1,0 +1,2 @@
+[[arch/archinstallation.wiki|Arch Installation guide]]
+[[artix/artixinstallation.wiki|Artix Installation guide]]
