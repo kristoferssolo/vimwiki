@@ -1,1 +1,2 @@
-[[school/school.wiki|School]]
+* [[school/school.wiki|School]]
+* [[guides/guides.wiki|Guides]]
