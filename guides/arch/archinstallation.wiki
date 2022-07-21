@@ -16,8 +16,8 @@
 `mkfs.fat -F 32 /dev/vda1`
 `fatlabel /dev/vda1 BOOT`
 
-`mount --mkdir /dev/vda1 /mnt/boot`
 `mount /dev/vda2 /mnt`
+`mount --mkdir /dev/vda1 /mnt/boot`
 `mount --mkdir /dev/vda3 /mnt/home`
 
 `pacstrap /mnt base base-devel linux linux-firmware`

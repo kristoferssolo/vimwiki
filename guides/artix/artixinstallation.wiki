@@ -125,8 +125,9 @@
 	127.0.1.1	myhostname.localdomain myhostname
 
 
-`pacman -S dhcpcd connman-runit connman-gtk elogind wget`
-`ln -s /etc/runit/sv/connmand /etc/runit/runsvdir/default`
+`pacman -S dhcpcd networkmanager elogind wget bluez bluez-runit`
+`ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default`
+`ln -s /etc/runit/sv/bluetoothd /etc/runit/runsvdir/default`
 
 `exit`
 `umount -R /mnt`
