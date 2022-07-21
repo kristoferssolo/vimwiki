@@ -7,18 +7,24 @@
 `cfdisk /dev/vda`
     %% chose `dos`
     * _boot - 256M_
+    %% optional
+    * _swap - == RAM or 2xRAM_
     * _root - 10G_
         %% 10GB for root in VM will be enough, but on hardware make it 30GB-50GB
     * _home - rest_
 
+`mkswap -L SWAP /dev/vda2`
+`mkfs.ext4 -L ROOT /dev/vda3`
+`mkfs.ext4 -L HOME /dev/vda4`
 `mkfs.ext4 -L ROOT /dev/vda2`
 `mkfs.ext4 -L HOME /dev/vda3`
 `mkfs.fat -F 32 /dev/vda1`
 `fatlabel /dev/vda1 BOOT`
 
-`mount /dev/vda2 /mnt`
+`mount /dev/vda3 /mnt`
 `mount --mkdir /dev/vda1 /mnt/boot`
-`mount --mkdir /dev/vda3 /mnt/home`
+`mount --mkdir /dev/vda4 /mnt/home`
+`swapon /dev/vda2`
 
 `pacstrap /mnt base base-devel linux linux-firmware`
 `genfstab -U /mnt >> /mnt/etc/fstab`

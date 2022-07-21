@@ -6,19 +6,23 @@
 `cfdisk /dev/vda`
     %% chose `dos`
     * _boot - 256M_
+    %% optional
+    * _swap - == RAM or 2xRAM_
     * _root - 10G_
         %% 10GB for root in VM will be enough, but on hardware make it 30GB-50GB
     * _home - rest_
 
-`mkfs.ext4 -L ROOT /dev/vda2`
-`mkfs.ext4 -L HOME /dev/vda3`
+`mkswap -L SWAP /dev/vda2`
+`mkfs.ext4 -L ROOT /dev/vda3`
+`mkfs.ext4 -L HOME /dev/vda4`
 `mkfs.fat -F 32 /dev/vda1`
 `fatlabel /dev/vda1 BOOT`
 
+`mount /dev/vda3 /mnt`
 `mkdir /mnt/{home,boot}`
 `mount /dev/vda1 /mnt/boot`
-`mount /dev/vda2 /mnt`
-`mount /dev/vda3 /mnt/home`
+`mount /dev/vda4 /mnt/home`
+`swapon /dev/vda2`
 
 `basestrap /mnt base base-devel runit elogind-runit linux linux-firmware`
 `fstabgen -U /mnt >> /mnt/etc/fstab`
@@ -113,7 +117,7 @@
 
 %% add Arch Linux keys
 `pacman -Syu artix-archlinux-support`
-`sudo pacman-key --populate archlinux`
+`pacman-key --populate archlinux`
 
 `nvim /etc/hostname`
     %% enter computer name
@@ -125,7 +129,7 @@
 	127.0.1.1	myhostname.localdomain myhostname
 
 
-`pacman -S dhcpcd networkmanager elogind wget bluez bluez-runit`
+`pacman -S dhcpcd networkmanager-runit wget bluez-runit`
 `ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default`
 `ln -s /etc/runit/sv/bluetoothd /etc/runit/runsvdir/default`
 
@@ -154,4 +158,4 @@
 
 %% install `reflector` for better Arch Linux server setup
 `sudo pacman -S reflector`
-`sudo reflector --sort rate --country Latvia,Lithuania,Estonia --protocol https --save /etc/pacman.d/mirrorlist-arch --age 12`
+`sudo reflector --sort rate --country Latvia,Lithuania,Estonia --protocol https --save /etc/pacman.d/mirrorlist-arch`
